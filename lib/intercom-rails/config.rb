@@ -60,6 +60,13 @@ module IntercomRails
       end
     end
 
+    AVATAR_VALIDATOR = Proc.new do |avatar, field_name|
+      raise ArgumentError, "#{field_name} avatar should be a hash" unless avatar.kind_of?(Hash)
+      unless avatar.values.all? { |value| value.kind_of?(Proc) || value.kind_of?(String) }
+        raise ArgumentError, "all avatar attributes should be either a Proc or a string"
+      end
+    end
+
     ARRAY_VALIDATOR = Proc.new do |data, field_name|
       raise ArgumentError, "#{field_name} data should be an Array" unless data.kind_of?(Array)
     end
@@ -107,6 +114,7 @@ module IntercomRails
       config_accessor :exclude_if, &IS_PROC_VALIDATOR
       config_accessor :model, &IS_PROC_VALIDATOR
       config_accessor :lead_attributes, &ARRAY_VALIDATOR
+      config_accessor :avatar, &AVATAR_VALIDATOR
       config_accessor :custom_data, &CUSTOM_DATA_VALIDATOR
 
       def self.company_association=(*)

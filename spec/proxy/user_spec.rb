@@ -144,4 +144,13 @@ describe IntercomRails::Proxy::User do
   it 'gets/sets lead_attributes with valid types' do
     expect { IntercomRails.config.user.lead_attributes = "utm_source" }.to raise_error(ArgumentError)
   end
+
+  it 'includes avatar' do
+    IntercomRails.config.user.avatar = {
+      'type' => 'avatar',
+      'image_url' => 'https://example.org/128Wash.jpg',
+    }
+    expect(IntercomRails.config.user.avatar.to_hash['type']).to eql('avatar')
+    expect(IntercomRails.config.user.avatar.to_hash['image_url']).to eql('https://example.org/128Wash.jpg')
+  end
 end
